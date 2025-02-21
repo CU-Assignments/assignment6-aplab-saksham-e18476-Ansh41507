@@ -1,0 +1,83 @@
+PROBLEM 1 CONVERT SORTED ARRAY TO BINARY SEARCH TREE
+#include <vector>
+#include <iostream>
+using namespace std;
+
+// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+TreeNode* sortedArrayToBST(vector<int>& nums) {
+    // Helper function for recursion
+    return buildTree(nums, 0, nums.size() - 1);
+}
+
+TreeNode* buildTree(vector<int>& nums, int left, int right) {
+    if (left > right) return nullptr;
+
+    int mid = left + (right - left) / 2;  // Avoid overflow
+    TreeNode* root = new TreeNode(nums[mid]);
+
+    // Recursively build left and right subtrees
+    root->left = buildTree(nums, left, mid - 1);
+    root->right = buildTree(nums, mid + 1, right);
+
+    return root;
+}
+
+// Function to print tree (In-order traversal)
+void inorderTraversal(TreeNode* root) {
+    if (root) {
+        inorderTraversal(root->left);
+        cout << root->val << " ";
+        inorderTraversal(root->right);
+    }
+}
+
+int main() {
+    vector<int> nums = {-10, -3, 0, 5, 9};
+    TreeNode* root = sortedArrayToBST(nums);
+    
+    cout << "In-order traversal of the BST: ";
+    inorderTraversal(root);  // Should print the sorted array
+    cout << endl;
+    
+    return 0;
+}
+PROBLEM 2 MAXIMUM DEPTH OF BINARY TREE
+#include <iostream>
+using namespace std;
+
+// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+int maxDepth(TreeNode* root) {
+    if (root == nullptr) return 0;
+    // Recursively find the max depth of the left and right subtrees
+    int leftDepth = maxDepth(root->left);
+    int rightDepth = maxDepth(root->right);
+    
+    // The depth of the current node is the max of left and right depths plus 1
+    return max(leftDepth, rightDepth) + 1;
+}
+
+int main() {
+    // Example Tree: [3,9,20,null,null,15,7]
+    TreeNode* root = new TreeNode(3);
+    root->left = new TreeNode(9);
+    root->right = new TreeNode(20);
+    root->right->left = new TreeNode(15);
+    root->right->right = new TreeNode(7);
+    
+    cout << "Maximum depth of the binary tree: " << maxDepth(root) << endl;
+    return 0;
+}
